@@ -1,36 +1,101 @@
 # Rafiki Works
 
-The system facilitates the coordination of payments and work logs between
+The system facilitates the coordination of worklogs and payments between
 the lead contractor (person ordering a service) and the subcontractor
 (person providing the service).
 
-- Wallet Provider Verification
+## Core functionality
 
-  > Wallet provider verification must be exercised in acceptance tests,
-  > despite it not being a system requirement. Verification steps are
-  > enforced on the system by the wallet provider.
+- Subcontractor bills a lead contractor, including the service worklogs.
+- Lead contractor pays the subcontractor, using the worklogs.
+- Payment is facilitated by an external wallet provider.
 
-    - newly registered are not verified, status is "not-started"
-    - when user starts, then status is "ready-to-submit"
-    - user needs to supply a legal entity, once done the status is "in-progress":
-    - when user is approved, then status is "approved"
-    - when user is rejected, then status is "rejected"
-    - when user makes an error, then status is "error"
+  Examples:
+    - User deposits money in a wallet.
+    - Money is moved from lead contractor's wallet to subcontractor's wallet
+      when lead contractor pays the subcontractor.
+    - User withdraws money from a wallet.
+    - Worklog with a net fee of denomination equal to 0 in a given currency
+      is not accepted.
+- Lead contractor reads the worklog description provided by the contractor.
 
-- Authentication
-  > In order to protect users from malicious actors, all actions
-  > in the system must be issued by an authenticated user.
+## Supporting functionality
 
-    1. Reject an action issued by a malicious/unauthenticated actor.
-    2. Allow the user to register.
-    3. Allow the user to log out of the system.
-    4. Allow the user to login after registration.
-    5. Inform the user of invalid password.
-    6. Inform the user of too many attempts.
-    7. Keep the user logged in after registration.
-    8. Prevent registration with the same email twice.
+- Lead contractor and the subcontractor segregate worklogs by project.
 
-## User stories:
+  Examples:
+    - Lead contractor adds and removes project members.
+    - Members of the same project can access each others worklogs.
+    - Project member can access the worklog hours of another member.
+    - Project member cannot access or deduce the monetary rate of a worklog
+      of another member.
+    - Lead contractor can add a worklog on behalf of a subcontractor.
+    - Lead contractor can update project name and description.
+    - Project member adds a worklog with the project hourly rate.
 
-- In order for the user to feel safe about his money,
-  he needs to access his full transaction history: deposit,withdraw,move
+### Usability
+
+- Subcontractor can correct some aspects of an incorrectly placed worklog.
+
+  Examples:
+    - Subcontractor can update worklog description and date of the service.
+    - Subcontractor can remove a worklog.
+    - Worklog used to pay the subcontractor is marked as paid.
+    - Subcontractor cannot remove a workflow marked as paid.
+
+- Lead contractor filters/excludes worklogs by subcontractor.
+
+### Contract rates
+
+- Lead contractor and subcontractors settle worklogs using a pre-agreed rate.
+
+  Examples:
+    - Lead contractor sets an hourly rate, as per an earlier agreement with
+      a subcontractor.
+    - Subcontractor adds a worklog selecting the hourly rate.
+    - Worklog net fee is the product of the worklog hours and the rate.
+
+  User stories:
+    - In order to know the amount of reported hours, as lead contractor
+      I need to sum up the total hours of the worklogs in the billing period.
+    - In order to tell the amount of remaining work, as a subcontractor,
+      I need to sum up the total hours of the worklogs in the billing period.
+
+### Invoicing
+
+- Invoice is generated with subcontractor worklogs.
+- Invoice item corresponding to the worklog with an hourly rate includes the
+  number of hours.
+- Lead contractor receives an inbound invoice from a subcontractor.
+- Subcontractor issues an outbound invoice to lead contractor.
+- Invoice can be accessed as a draft before it is issued.
+- A draft invoice is not assigned an invoice number.
+
+### Security
+
+> For the purpose of protecting users from malicious actors, all actions
+> in the system must be issued by an authenticated user.
+
+- Reject an action issued by a malicious/unauthenticated actor.
+
+  Examples:
+    - Login attempt with invalid password is not successful.
+    - Too many failed login attempts results in a temporary blockage.
+    - Registration with the same email twice is not allowed.
+
+### Wallet provider verification
+
+> Wallet provider verification must be exercised in acceptance tests,
+> despite it not being a system requirement. Verification steps are
+> enforced on the system by the wallet provider.
+
+- Unverified user cannot deposit or withdraw money from a wallet.
+- User becomes verified if the verification process result is positive.
+- User verification status is in progress, if he has started the
+  verification process, which has not finished.
+- User becomes unverified if verification process result is negative.
+
+## Functionality to be removed
+
+- Subcontractor adds a worklog with a set fee directly, without an hourly rate.
+- Lead contractor marks a worklog as paid without issuing a payment.
