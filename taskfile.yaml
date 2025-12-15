@@ -1,0 +1,6 @@
+version: 3
+tasks:
+  install: yarn install
+  test:
+    - task: install
+    - yarn run vitest --run
