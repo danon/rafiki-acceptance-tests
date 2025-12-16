@@ -30,7 +30,10 @@ the lead contractor (person ordering a service) and the subcontractor
       of another member.
     - Lead contractor can add a worklog on behalf of a subcontractor.
     - Lead contractor can update project name and description.
-    - Project member adds a worklog with the project hourly rate.
+
+! Explicit rate, simplicity,
+! Rate is supposed to be clear and agreed by both parties.
+! changing rate without communicating to the other party is not allowed.
 
 ### Usability
 
@@ -39,8 +42,8 @@ the lead contractor (person ordering a service) and the subcontractor
   Examples:
     - Subcontractor can update worklog description and date of the service.
     - Subcontractor can remove a worklog.
-    - Worklog used to pay the subcontractor is marked as paid.
-    - Subcontractor cannot remove a workflow marked as paid.
+    - Worklog used to pay the subcontractor is sealed.
+    - Subcontractor cannot remove a sealed worklog.
 
 - Lead contractor filters/excludes worklogs by subcontractor.
 
@@ -97,4 +100,4 @@ the lead contractor (person ordering a service) and the subcontractor
 ## Functionality to be removed
 
 - Subcontractor adds a worklog with a set fee directly, without an hourly rate.
-- Lead contractor marks a worklog as paid without issuing a payment.
+- Lead contractor marks a worklog as sealed without issuing a payment.
