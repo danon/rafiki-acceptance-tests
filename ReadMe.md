@@ -55,7 +55,7 @@ the lead contractor (person ordering a service) and the subcontractor
     - Lead contractor sets an hourly rate, as per an earlier agreement with
       a subcontractor.
     - Subcontractor adds a worklog selecting the hourly rate.
-    - Worklog net fee is the product of the worklog hours and the rate.
+    - Worklog end amount is the product of the worklog hours and the rate.
 
   User stories:
     - In order to know the amount of reported hours, as lead contractor
