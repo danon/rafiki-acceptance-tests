@@ -54,12 +54,6 @@ the lead contractor (person ordering a service) and the subcontractor
     - Subcontractor adds a worklog selecting the hourly rate.
     - Worklog end amount is the product of the worklog hours and the rate.
 
-  User stories:
-    - In order to know the amount of reported hours, as lead contractor
-      I need to sum up the total hours of the worklogs in the billing period.
-    - In order to tell the amount of remaining work, as a subcontractor,
-      I need to sum up the total hours of the worklogs in the billing period.
-
 ### Invoicing
 
 - Invoice is generated with subcontractor worklogs.
