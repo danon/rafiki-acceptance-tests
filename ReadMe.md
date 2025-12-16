@@ -30,10 +30,7 @@ the lead contractor (person ordering a service) and the subcontractor
       of another member.
     - Lead contractor can add a worklog on behalf of a subcontractor.
     - Lead contractor can update project name and description.
-
-! Explicit rate, simplicity,
-! Rate is supposed to be clear and agreed by both parties.
-! changing rate without communicating to the other party is not allowed.
+    - Subcontractor adds a worklog with one of the pre-agreed rates for the project.
 
 ### Usability
 
