@@ -15,8 +15,7 @@ the lead contractor (person ordering a service) and the subcontractor
     - Money is moved from lead contractor's wallet to subcontractor's wallet
       when lead contractor pays the subcontractor.
     - User withdraws money from a wallet.
-    - Worklog with a net fee of denomination equal to 0 in a given currency
-      is not accepted.
+    - Worklog with an end amount of 0 in any currency is not accepted.
 - Lead contractor reads the worklog description provided by the contractor.
 
 ## Supporting functionality
