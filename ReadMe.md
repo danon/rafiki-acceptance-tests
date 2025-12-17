@@ -89,3 +89,26 @@ the lead contractor (person ordering a service) and the subcontractor
 
 - Subcontractor adds a worklog with a set fee directly, without an hourly rate.
 - Lead contractor marks a worklog as sealed without issuing a payment.
+
+## Software development
+
+### How to read acceptance tests
+
+Test filenames:
+
+- `core.*` tests contain functionalities that are crucial to the structure of the application,
+  and all decisions follow from these decisions.
+- `peripheral.*` tests contain surrounding helper functionality that isn't strictly required
+  to use the system.
+- `*-support` suffix indicates that tests include additional, non-crucial functionalities,
+  to a feature specified elsewhere.
+
+Glossary:
+
+- "project" - link between two parties, one providing a service for the other
+- "project member" - project owner or a project contributor
+- "project owner" - user who created the project (person requiring the service or
+  providing a service for somebody outside the project)
+- "project contributor" - a person invited to the project, not the owner (person providing
+  a service to the project owner)
+- "bill" - a project entry indicating a payable item, expected to be paid
