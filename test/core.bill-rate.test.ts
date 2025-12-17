@@ -1,7 +1,6 @@
-import {describe} from './vitest';
+import {describe, test} from './vitest';
 
 describe('Bill rate', () => {
-  // core-bill-rate
-  // add bill with custom/fixed amount; assert end amount
-  // add bill with an hourly rate; assert end amount
+  test('add bill with custom/fixed amount; assert end amount', () => {});
+  test('add bill with an hourly rate; assert end amount', () => {});
 });

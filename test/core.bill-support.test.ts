@@ -1,10 +1,9 @@
-import {describe} from './vitest';
+import {describe, test} from './vitest';
 
 describe('Bill support', () => {
-  // core-bill-support
-  // project owner can seal bills; assert bill is sealed
-  // bill owner can remove bill; assert bill does not exist
-  // ?? bill owner cannot remove if bill is sealed; assert not removed
-  // bill owner can edit date; assert date updated
-  // bill owner can edit description; assert description updated
+  test('project owner can seal bills; assert bill is sealed', () => {});
+  test('bill owner can remove bill; assert bill does not exist', () => {});
+  test('bill owner cannot remove if bill is sealed; assert not removed', () => {});
+  test('bill owner can edit date; assert date updated', () => {});
+  test('bill owner can edit description; assert description updated', () => {});
 });

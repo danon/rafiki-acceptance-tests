@@ -1,7 +1,6 @@
 import {describe} from './vitest';
 
 describe('Wallet payment', () => {
-  // wallet-payment
   // Project owner pays a contributor;
   // - owner wallet goes down
   // - contributor wallet goes up

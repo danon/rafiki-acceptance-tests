@@ -1,7 +1,6 @@
 import {describe} from './vitest';
 
 describe('Wallet verification', () => {
-  // wallet-verification
   // newly user is unverified
   // submitted verification is in progress
   // submit as individual

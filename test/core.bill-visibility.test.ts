@@ -1,8 +1,7 @@
-import {describe} from './vitest';
+import {describe, test} from './vitest';
 
 describe('Bill rate', () => {
-  // core-bill-visibility
-  // project owner can see bills of a contributor; assert can access
-  // project member can see bills of other contributor; assert can access
-  // project member cannot access rate or a total of a bill; assert cannot access
+  test('project owner can see bills of a contributor; assert can access', () => {});
+  test('project contributor can see bills of other contributor; assert can access', () => {});
+  test('project contributor cannot access rate or a total of a bill; assert cannot access', () => {});
 });
