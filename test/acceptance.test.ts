@@ -66,6 +66,15 @@ import {assertEquals, test} from './vitest';
 // - owner pays
 // - bill is sealed?
 
+// wallet-verification
+// newly user is unverified
+// submitted verification is in progress
+// submit as individual
+// submit as business
+// when wallet provider results with positive, then it's verified
+// when wallet provider results with negative, then it's unverified
+// when wallet provider results with negative, then it's unverified and show error
+
 // core-project-support
 // read/update project description and name
 // create/update project validation: name not empty, description not empty
