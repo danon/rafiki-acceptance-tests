@@ -15,8 +15,14 @@ export class Dsl {
     this.driver.inviteProjectContributor(projectName, contributorName);
   }
 
-  actingAsNewProjectContributor(projectName: string, contributorName: string): void {
-    this.actingAsNewProjectOwnerWithContributor(projectName, contributorName, 'Owner');
+  actingAsNewProjectOwnerWithContributors(projectName: string, contributorNames: string[]): void {
+    contributorNames.forEach(name => this.registerUserAndLogout(name));
+    this.actingAsNewProjectOwner(projectName, 'Owner');
+    contributorNames.forEach(name => this.inviteProjectContributor(projectName, name));
+  }
+
+  actingAsNewProjectContributor(projectName: string, contributorName: string, ownerName: string = 'Owner'): void {
+    this.actingAsNewProjectOwnerWithContributor(projectName, contributorName, ownerName);
     this.logoutAndLoginAs(contributorName);
   }
 
@@ -28,11 +34,6 @@ export class Dsl {
   private logoutAndLoginAs(userName: string): void {
     this.driver.logoutUser();
     this.driver.loginUser(userName);
-  }
-
-  createProject(projectName: string): void {
-    this.driver.registerUserAndLogin('Owner');
-    this.driver.createProject(projectName);
   }
 
   assertProjectExists(projectName: string): void {
@@ -132,5 +133,12 @@ export class Dsl {
 
   assertBillEndAmount(projectName: string, billDescription: string, expectedEndAmount: number): void {
     assertEquals(expectedEndAmount, this.driver.findBillEndAmount(projectName, billDescription));
+  }
+
+  // core.bill-visibility
+
+  actingAsUser(userName: string): void {
+    this.driver.logoutUser();
+    this.driver.loginUser(userName);
   }
 }

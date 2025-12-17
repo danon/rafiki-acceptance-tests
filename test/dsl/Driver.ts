@@ -21,7 +21,7 @@ function billMatches(projectName: string, billDescription: string): Predicate<Bi
 
 export class Driver {
   private registeredUsers = new Set<string>();
-  private projects = new Set<string>();
+  private projectOwners = new Map<string, string>();
   private bills: Bill[] = [];
   private currentUser: string|null = null;
   private projectContributors: ProjectContributor[] = [];
@@ -53,18 +53,18 @@ export class Driver {
   // core
 
   createProject(projectName: string): void {
-    if (this.projects.has(projectName)) {
+    if (this.projectExists(projectName)) {
       throw new Error('Failed to create a project, project already exists.');
     }
     if (this.currentUser === null) {
       throw new Error('Failed to create a project, user not logged in.');
     }
-    this.projects.add(projectName);
+    this.projectOwners.set(projectName, this.currentUser);
     this.inviteProjectContributor(projectName, this.currentUser);
   }
 
   projectExists(projectName: string): boolean {
-    return this.projects.has(projectName);
+    return this.projectOwners.has(projectName);
   }
 
   addBill(projectName: string, billDescription: string, date: string, endAmount: number): void {
@@ -173,6 +173,20 @@ export class Driver {
   }
 
   findBillEndAmount(projectName: string, billDescription: string): number {
-    return this.findBill(projectName, billDescription).endAmount;
+    if (this.currentUser === null) {
+      throw new Error('Failed to find bill end amount, user not logged in.');
+    }
+    const bill = this.findBill(projectName, billDescription);
+    if (this.currentUser === bill.owner) {
+      return bill.endAmount;
+    }
+    if (this.isProjectOwner(this.currentUser, projectName)) {
+      return bill.endAmount;
+    }
+    return -1;
+  }
+
+  private isProjectOwner(userName: string, projectName: string): boolean {
+    return this.projectOwners.get(projectName) === userName;
   }
 }

@@ -5,7 +5,7 @@ describe('Project bills and members', () => {
   let dsl: Dsl;
   beforeEach(() => dsl = new Dsl());
   test('Project owner can creates a project', () => {
-    dsl.createProject('Jetpack');
+    dsl.actingAsNewProjectOwner('Jetpack', 'Owner');
     dsl.assertProjectExists('Jetpack');
   });
   test('Project owner can add a bill', () => {
