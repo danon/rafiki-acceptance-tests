@@ -8,6 +8,7 @@ interface Bill {
   description: string;
   date: string;
   sealed: boolean;
+  owner: string;
 }
 
 type Predicate<T> = (argument: T) => boolean;
@@ -66,11 +67,15 @@ export class Driver {
   }
 
   addBill(projectName: string, billDescription: string, date: string): void {
+    if (this.currentUser === null) {
+      throw new Error('Failed to add a bill, user not logged in.');
+    }
     this.bills.push({
       projectName,
       description: billDescription,
       date,
       sealed: false,
+      owner: this.currentUser,
     });
   }
 
@@ -78,16 +83,16 @@ export class Driver {
     if (!this.projectExists(projectName)) {
       throw new Error('Failed to find bill of project, project does not exist.');
     }
-    return !!this.findProjectBillOptional(projectName, billDescription);
+    return !!this.findBillOptional(projectName, billDescription);
   }
 
-  private findProjectBillOptional(projectName: string, billDescription: string): Bill|null {
+  private findBillOptional(projectName: string, billDescription: string): Bill|null {
     const bill = this.bills.find(billMatches(projectName, billDescription));
     return bill || null;
   }
 
-  private findProjectBill(projectName: string, billDescription: string): Bill {
-    const bill = this.findProjectBillOptional(projectName, billDescription);
+  private findBill(projectName: string, billDescription: string): Bill {
+    const bill = this.findBillOptional(projectName, billDescription);
     if (!bill) {
       throw new Error('Failed to find project bill, bill does not exist.');
     }
@@ -114,7 +119,7 @@ export class Driver {
   // core.bill-support
 
   sealBill(projectName: string, billDescription: string): void {
-    const bill = this.findProjectBill(projectName, billDescription);
+    const bill = this.findBill(projectName, billDescription);
     if (bill.sealed) {
       throw new Error('Failed to seal bill, bill already sealed.');
     }
@@ -122,11 +127,11 @@ export class Driver {
   }
 
   updateBillDate(projectName: string, billDescription: string, date: string): void {
-    this.findProjectBill(projectName, billDescription).date = date;
+    this.findBill(projectName, billDescription).date = date;
   }
 
   updateBillDescription(projectName: string, billDescription: string, updatedBillDescription: string): void {
-    this.findProjectBill(projectName, billDescription).description = updatedBillDescription;
+    this.findBill(projectName, billDescription).description = updatedBillDescription;
   }
 
   removeBill(projectName: string, billDescription: string): void {
@@ -140,10 +145,27 @@ export class Driver {
   }
 
   findBillDate(projectName: string, billDescription: string): string {
-    return this.findProjectBill(projectName, billDescription).date;
+    return this.findBill(projectName, billDescription).date;
   }
 
   billSealed(projectName: string, billDescription: string): boolean {
-    return this.findProjectBill(projectName, billDescription).sealed;
+    return this.findBill(projectName, billDescription).sealed;
+  }
+
+  addBillOnBehalf(projectName: string, billDescription: string, contributorName: string): void {
+    if (!this.registeredUsers.has(contributorName)) {
+      throw new Error('Failed to add bill on behalf of user, user does not exists.');
+    }
+    this.bills.push({
+      projectName,
+      description: billDescription,
+      date: '2000-01-01',
+      sealed: false,
+      owner: contributorName,
+    });
+  }
+
+  findBillOwner(projectName: string, billDescription: string): string {
+    return this.findBill(projectName, billDescription).owner;
   }
 }

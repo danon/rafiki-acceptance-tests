@@ -111,4 +111,14 @@ export class Dsl {
   assertBillSealed(projectName: string, billDescription: string): void {
     assertTrue(this.driver.billSealed(projectName, billDescription));
   }
+
+  // core.member-support
+
+  addBillOnBehalf(projectName: string, billDescription: string, contributorName: string): void {
+    this.driver.addBillOnBehalf(projectName, billDescription, contributorName);
+  }
+
+  assertBillOwner(projectName: string, billDescription: string, contributorName: string): void {
+    assertEquals(contributorName, this.driver.findBillOwner(projectName, billDescription));
+  }
 }
