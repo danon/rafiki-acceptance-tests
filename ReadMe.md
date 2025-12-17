@@ -17,9 +17,6 @@ the lead contractor (person ordering a service) and the subcontractor
     - User withdraws money from a wallet.
     - Worklog with an end amount of 0 in any currency is not accepted.
 - Lead contractor reads the worklog description provided by the contractor.
-
-## Supporting functionality
-
 - Lead contractor and the subcontractor segregate worklogs by project.
 
   Examples:
