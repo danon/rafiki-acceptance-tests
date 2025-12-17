@@ -46,7 +46,25 @@ import {assertEquals, test} from './vitest';
 // project contributor can generate a contributor invoice, containing his project bills; assert contains own bills
 // hourly bill is represented in invoice with an hour and rate; assert invoice contains hours and rates
 
-// wallet payments
+// wallet
+// User has 0 money in his wallet.
+// Verified user can topup his wallet; asset money in wallet
+// User owner can list his transaction history; assert transaction history has items
+// User can withdraw money using USDC blockchain address
+// User can withdraw money using USD bank details
+// User can withdraw money to a bank account; wallet goes down
+// User can withdraw money to USD bank account; mural call
+// User can withdraw money to ZAR bank account; mural call
+// User can withdraw money to EUR bank account; mural call
+
+// wallet-payment
+// Project owner pays a contributor;
+// - owner wallet goes down
+// - contributor wallet goes up
+// Project owner pays a bill with his wallet;
+// - bill exists
+// - owner pays
+// - bill is sealed?
 
 // core-project-support
 // read/update project description and name
