@@ -40,7 +40,7 @@ export class Dsl {
   }
 
   addBill(projectName: string, billDescription: string): void {
-    this.driver.addBill(projectName, billDescription, '2000-01-01');
+    this.driver.addBill(projectName, billDescription, '2000-01-01', 0);
   }
 
   assertProjectContainsBill(projectName: string, billDescription: string): void {
@@ -72,12 +72,12 @@ export class Dsl {
   }
 
   addSealedBill(projectName: string, billDescription: string): void {
-    this.driver.addBill(projectName, billDescription, '2000-01-01');
+    this.driver.addBill(projectName, billDescription, '2000-01-01', 0);
     this.driver.sealBill(projectName, billDescription);
   }
 
   addBillWithDate(projectName: string, billDescription: string, date: string): void {
-    this.driver.addBill(projectName, billDescription, date);
+    this.driver.addBill(projectName, billDescription, date, 0);
   }
 
   updateBillDate(projectName: string, billDescription: string, date: string): void {
@@ -120,5 +120,17 @@ export class Dsl {
 
   assertBillOwner(projectName: string, billDescription: string, contributorName: string): void {
     assertEquals(contributorName, this.driver.findBillOwner(projectName, billDescription));
+  }
+
+  addBillRateFixed(projectName: string, billDescription: string, fixedAmount: number): void {
+    this.driver.addBill(projectName, billDescription, '2000-01-01', fixedAmount);
+  }
+
+  addBillRateHourly(projectName: string, billDescription: string, hours: number, hourlyRate: number): void {
+    this.driver.addBill(projectName, billDescription, '2000-01-01', hours * hourlyRate);
+  }
+
+  assertBillEndAmount(projectName: string, billDescription: string, expectedEndAmount: number): void {
+    assertEquals(expectedEndAmount, this.driver.findBillEndAmount(projectName, billDescription));
   }
 }

@@ -9,6 +9,7 @@ interface Bill {
   date: string;
   sealed: boolean;
   owner: string;
+  endAmount: number;
 }
 
 type Predicate<T> = (argument: T) => boolean;
@@ -66,7 +67,7 @@ export class Driver {
     return this.projects.has(projectName);
   }
 
-  addBill(projectName: string, billDescription: string, date: string): void {
+  addBill(projectName: string, billDescription: string, date: string, endAmount: number): void {
     if (this.currentUser === null) {
       throw new Error('Failed to add a bill, user not logged in.');
     }
@@ -76,6 +77,7 @@ export class Driver {
       date,
       sealed: false,
       owner: this.currentUser,
+      endAmount,
     });
   }
 
@@ -162,10 +164,15 @@ export class Driver {
       date: '2000-01-01',
       sealed: false,
       owner: contributorName,
+      endAmount: 0,
     });
   }
 
   findBillOwner(projectName: string, billDescription: string): string {
     return this.findBill(projectName, billDescription).owner;
+  }
+
+  findBillEndAmount(projectName: string, billDescription: string): number {
+    return this.findBill(projectName, billDescription).endAmount;
   }
 }
