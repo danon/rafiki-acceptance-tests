@@ -89,7 +89,7 @@ export class Driver {
   }
 
   private findBillOptional(projectName: string, billDescription: string): Bill|null {
-    const bill = this.bills.find(billMatches(projectName, billDescription));
+    const bill = this.filteredBills().find(billMatches(projectName, billDescription));
     return bill || null;
   }
 
@@ -188,5 +188,17 @@ export class Driver {
 
   private isProjectOwner(userName: string, projectName: string): boolean {
     return this.projectOwners.get(projectName) === userName;
+  }
+
+  private filteredBillPredicate = (bill: Bill) => true;
+
+  filterBillsByMember(userName: string, userIncluded: boolean): void {
+    this.filteredBillPredicate = (bill: Bill): boolean => {
+      return userIncluded === (bill.owner === userName);
+    };
+  }
+
+  private filteredBills(): Bill[] {
+    return this.bills.filter(this.filteredBillPredicate);
   }
 }

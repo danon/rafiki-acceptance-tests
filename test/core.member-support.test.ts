@@ -13,7 +13,28 @@ describe('Member support', () => {
     dsl.assertBillExists('Exoskeleton', 'Bill');
     dsl.assertBillOwner('Exoskeleton', 'Bill', 'Contrib');
   });
-  test('filter/exclude bills by member; assert filtered', () => {
-    // TODO implement filtering and excluding
+  describe('Filter bills by member', () => {
+    test('Include bills only by member', () => {
+      // given
+      dsl.actingAsNewProjectOwnerWithContributors('Neural chip', ['Contrib1', 'Contrib2']);
+      dsl.actingAsUserAddBill('Contrib1', 'Neural chip', 'First');
+      dsl.actingAsUserAddBill('Contrib2', 'Neural chip', 'Second');
+      // when bills are filtered to include only the first contributors bill
+      dsl.filterBillsByMember('Contrib1');
+      // then only the first contributors bill is present
+      dsl.assertBillExists('Neural chip', 'First');
+      dsl.assertBillNotExists('Neural chip', 'Second');
+    });
+    test('Exclude bills by member', () => {
+      // given
+      dsl.actingAsNewProjectOwnerWithContributors('Ion engine', ['Contrib1', 'Contrib2']);
+      dsl.actingAsUserAddBill('Contrib1', 'Ion engine', 'First');
+      dsl.actingAsUserAddBill('Contrib2', 'Ion engine', 'Second');
+      // when bills are filtered to include only the first contributors bill
+      dsl.excludeBillsByMember('Contrib1');
+      // then only the first contributors bill is present
+      dsl.assertBillNotExists('Ion engine', 'First');
+      dsl.assertBillExists('Ion engine', 'Second');
+    });
   });
 });

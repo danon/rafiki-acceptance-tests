@@ -141,4 +141,17 @@ export class Dsl {
     this.driver.logoutUser();
     this.driver.loginUser(userName);
   }
+
+  actingAsUserAddBill(userName: string, projectName: string, billDescription: string): void {
+    this.actingAsUser(userName);
+    this.addBill(projectName, billDescription);
+  }
+
+  filterBillsByMember(userName: string): void {
+    this.driver.filterBillsByMember(userName, true);
+  }
+
+  excludeBillsByMember(userName: string): void {
+    this.driver.filterBillsByMember(userName, false);
+  }
 }
