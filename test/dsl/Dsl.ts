@@ -156,4 +156,25 @@ export class Dsl {
   excludeBillsByMember(userName: string): void {
     this.driver.filterBillsByMember(userName, false);
   }
+
+  actingAsNewUser(userName: string): void {
+    this.driver.registerUserAndLogin(userName);
+  }
+
+  assertWalletBalance(expectedBalance: number): void {
+    assertEquals(expectedBalance, this.driver.findWalletBalance());
+  }
+
+  walletDeposit(amount: number): void {
+    this.driver.walletDeposit(amount);
+  }
+
+  assertWalletTransactionsContains(expectedTransaction: DslTransaction): void {
+    assertEquals([expectedTransaction], this.driver.listWalletTransactions());
+  }
+}
+
+export interface DslTransaction {
+  type: 'deposit',
+  amount: number
 }

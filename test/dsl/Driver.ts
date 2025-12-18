@@ -1,3 +1,5 @@
+import {DslTransaction} from './Dsl';
+
 interface ProjectContributor {
   projectName: string;
   contributorName: string;
@@ -37,9 +39,7 @@ export class Driver {
   }
 
   logoutUser(): void {
-    if (this.currentUser === null) {
-      throw new Error('Failed to logout user, user is not logged in.');
-    }
+    this.validateUserLoggedIn('Failed to logout user');
     this.currentUser = null;
   }
 
@@ -56,11 +56,9 @@ export class Driver {
     if (this.projectExists(projectName)) {
       throw new Error('Failed to create a project, project already exists.');
     }
-    if (this.currentUser === null) {
-      throw new Error('Failed to create a project, user not logged in.');
-    }
-    this.projectOwners.set(projectName, this.currentUser);
-    this.inviteProjectContributor(projectName, this.currentUser);
+    this.validateUserLoggedIn('Failed to create a project');
+    this.projectOwners.set(projectName, this.currentUser!);
+    this.inviteProjectContributor(projectName, this.currentUser!);
   }
 
   projectExists(projectName: string): boolean {
@@ -68,15 +66,13 @@ export class Driver {
   }
 
   addBill(projectName: string, billDescription: string, date: string, endAmount: number): void {
-    if (this.currentUser === null) {
-      throw new Error('Failed to add a bill, user not logged in.');
-    }
+    this.validateUserLoggedIn('Failed to add a bill');
     this.bills.push({
       projectName,
       description: billDescription,
       date,
       sealed: false,
-      owner: this.currentUser,
+      owner: this.currentUser!,
       endAmount,
     });
   }
@@ -210,5 +206,35 @@ export class Driver {
 
   private filteredBills(): Bill[] {
     return this.bills.filter(this.filteredBillPredicate);
+  }
+
+  private userWallets: Map<string, number> = new Map<string, number>();
+
+  findWalletBalance(): number {
+    this.validateUserLoggedIn('Failed to find wallet balance');
+    return this.userWallets.get(this.currentUser!) || 0;
+  }
+
+  walletDeposit(amount: number): void {
+    this.validateUserLoggedIn('Failed to deposit into wallet');
+    this.userWallets.set(
+      this.currentUser!,
+      this.findWalletBalance() + amount);
+    this.transactions.push({
+      type: 'deposit',
+      amount,
+    });
+  }
+
+  private validateUserLoggedIn(errorMessage: string): void {
+    if (this.currentUser === null) {
+      throw new Error(`${errorMessage}, user is not logged in.`);
+    }
+  }
+
+  private transactions: DslTransaction[] = [];
+
+  listWalletTransactions(): DslTransaction[] {
+    return this.transactions;
   }
 }
