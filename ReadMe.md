@@ -103,15 +103,18 @@ Test filenames:
 - `*-support` suffix indicates that tests include additional, non-crucial functionalities,
   to a feature specified elsewhere.
 
-Glossary:
+### Glossary:
 
-- "project"
+- "project":
     - link between at least two parties, one providing a service for the other
     - can also be a space for a single person logging his work
+    - can be created by any user
 - "project member" - project owner or a project contributor
-- "project owner" - user who created the project (person requiring the service or
-  providing a service for somebody outside the project)
-- "project contributor" - a person invited to the project, not the owner (person providing
-  a service to the project owner)
+- "project owner":
+    - user who created the project
+    - person requiring the service or providing a service for somebody outside the project
+- "project contributor":
+    - a person invited to the project, not the owner
+    - person providing a service to the project owner
 - "bill" - a project entry indicating a payable item, expected to be paid
-- "bill owner" - a user who created the bill
+- "bill owner" - a project member who created the bill
