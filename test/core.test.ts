@@ -4,7 +4,7 @@ import {beforeEach, describe, test} from './vitest';
 describe('Project bills and members', () => {
   let dsl: Dsl;
   beforeEach(() => dsl = new Dsl());
-  test('Project owner can creates a project', () => {
+  test('Project owner can create a project', () => {
     dsl.actingAsNewProjectOwner('Jetpack', 'Owner');
     dsl.assertProjectExists('Jetpack');
   });
