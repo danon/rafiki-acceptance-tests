@@ -6,35 +6,35 @@ describe('Member support', () => {
   beforeEach(() => dsl = new Dsl());
   test('Project owner can add bill on behalf of contributor', () => {
     // given a project owner
-    dsl.actingAsNewProjectOwnerWithContributor('Exoskeleton', 'Contrib', 'Owner');
+    dsl.project.actingAsNewProjectOwnerWithContributor('Contrib', 'Owner');
     // when he adds a bill on behalf of contributor
-    dsl.addBillOnBehalf('Exoskeleton', 'Bill', 'Contrib');
+    dsl.project.addBillOnBehalf('Exoskeleton', 'Contrib');
     // then the bill is created by the contributor
-    dsl.assertBillExists('Exoskeleton', 'Bill');
-    dsl.assertBillOwner('Exoskeleton', 'Bill', 'Contrib');
+    dsl.project.assertBillExists('Exoskeleton');
+    dsl.project.assertBillOwner('Exoskeleton', 'Contrib');
   });
   describe('Filter bills by member', () => {
     test('Include bills only by member', () => {
       // given
-      dsl.actingAsNewProjectOwnerWithContributors('Neural chip', ['Contrib1', 'Contrib2']);
-      dsl.actingAsUserAddBill('Contrib1', 'Neural chip', 'First');
-      dsl.actingAsUserAddBill('Contrib2', 'Neural chip', 'Second');
+      dsl.project.actingAsNewProjectOwnerWithContributors(['Contrib1', 'Contrib2']);
+      dsl.project.actingAsUserAddBill('Contrib1', 'First neural chip');
+      dsl.project.actingAsUserAddBill('Contrib2', 'Second neural chip');
       // when bills are filtered to include only the first contributors bill
       dsl.filterBillsByMember('Contrib1');
       // then only the first contributors bill is present
-      dsl.assertBillExists('Neural chip', 'First');
-      dsl.assertBillNotExists('Neural chip', 'Second');
+      dsl.project.assertBillExists('First neural chip');
+      dsl.project.assertBillNotExists('Second neural chip');
     });
     test('Exclude bills by member', () => {
       // given
-      dsl.actingAsNewProjectOwnerWithContributors('Ion engine', ['Contrib1', 'Contrib2']);
-      dsl.actingAsUserAddBill('Contrib1', 'Ion engine', 'First');
-      dsl.actingAsUserAddBill('Contrib2', 'Ion engine', 'Second');
+      dsl.project.actingAsNewProjectOwnerWithContributors(['Contrib1', 'Contrib2']);
+      dsl.project.actingAsUserAddBill('Contrib1', 'First ion engine');
+      dsl.project.actingAsUserAddBill('Contrib2', 'Second ion engine');
       // when bills are filtered to include only the first contributors bill
       dsl.excludeBillsByMember('Contrib1');
       // then only the first contributors bill is present
-      dsl.assertBillNotExists('Ion engine', 'First');
-      dsl.assertBillExists('Ion engine', 'Second');
+      dsl.project.assertBillNotExists('First ion engine');
+      dsl.project.assertBillExists('Second ion engine');
     });
   });
 });

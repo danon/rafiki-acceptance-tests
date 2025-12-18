@@ -1,8 +1,10 @@
 import {assertEquals, assertFalse, assertTrue} from '../vitest';
 import {Driver} from './Driver';
+import {DslProject} from './DslProject';
 
 export class Dsl {
   private driver: Driver = new Driver();
+  public project: DslProject = new DslProject(this);
 
   actingAsNewProjectOwner(projectName: string, ownerName: string): void {
     this.driver.registerUserAndLogin(ownerName);

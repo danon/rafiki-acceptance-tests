@@ -6,51 +6,50 @@ describe('Bill support', () => {
   beforeEach(() => dsl = new Dsl());
   test('Project owner can seal bills', () => {
     // given a bill exists in a project
-    dsl.actingAsNewProjectOwner('Hologram', 'Power ranger');
-    dsl.addBill('Hologram', 'Install holographic projector');
+    dsl.project.actingAsNewProjectOwner('Power ranger');
+    dsl.project.addBill('Install holographic projector');
     // when the project owner seals the bill
-    dsl.sealBill('Hologram', 'Install holographic projector');
+    dsl.project.sealBill('Install holographic projector');
     // then the bill is sealed
-    dsl.assertBillSealed('Hologram', 'Install holographic projector');
+    dsl.project.assertBillSealed('Install holographic projector');
   });
   test('Bill owner can remove bill', () => {
     // given an existing bill in a project
-    dsl.actingAsNewProjectOwner('Cloaking device', 'Predator');
-    dsl.addBill('Cloaking device', 'Add light bending');
+    dsl.project.actingAsNewProjectOwner('Predator');
+    dsl.project.addBill('Cloaking device');
     // when the bill owner removes the bill
-    dsl.removeBill('Cloaking device', 'Add light bending');
+    dsl.project.removeBill('Cloaking device');
     // then the bill is removed
-    dsl.assertBillNotExists('Cloaking device', 'Add light bending');
+    dsl.project.assertBillNotExists('Cloaking device');
   });
   test('Bill owner cannot remove if bill is sealed', () => {
     // given a sealed bill is added to a project
-    dsl.actingAsNewProjectOwner('Lightsaber', 'Skywalker');
-    dsl.addSealedBill('Lightsaber', 'Add tokamak reactor');
+    dsl.project.actingAsNewProjectOwner('Skywalker');
+    dsl.project.addSealedBill('Add tokamak reactor');
     // when the owner attempts to remove a sealed bill
-    dsl.attemptRemoveBill('Lightsaber', 'Add tokamak reactor');
+    dsl.project.attemptRemoveBill('Add tokamak reactor');
     // then the bills is not removed
-    dsl.assertBillExists('Lightsaber', 'Add tokamak reactor');
+    dsl.project.assertBillExists('Add tokamak reactor');
   });
   test('Bill owner can update date', () => {
     // given a bill with date is added to a project
-    dsl.actingAsNewProjectOwner('Plasma-gun', 'Shepard');
-    dsl.addBillWithDate('Plasma-gun', 'Bill', '1999-12-12');
+    dsl.project.actingAsNewProjectOwner('Shepard');
+    dsl.project.addBillWithDate('Plasma-gun', '1999-12-12');
     // when the bill owner updates the date of the bill
-    dsl.updateBillDate('Plasma-gun', 'Bill', '2025-01-01');
+    dsl.project.updateBillDate('Plasma-gun', '2025-01-01');
     // then the date is the updated date
-    dsl.assertBillDate('Plasma-gun', 'Bill', '2025-01-01');
+    dsl.project.assertBillDate('Plasma-gun', '2025-01-01');
   });
   test('Bill owner can edit description', () => {
     // given a bill exists in a project
-    dsl.actingAsNewProjectOwner('Sonic screwdriver', 'Doctor');
-    dsl.addBill('Sonic screwdriver', 'Install sonic motor');
+    dsl.project.actingAsNewProjectOwner('Doctor');
+    dsl.project.addBill('Install sonic motor');
     // when the bill owner updates the bill description
-    dsl.updateBillDescription(
-      'Sonic screwdriver',
+    dsl.project.updateBillDescription(
       'Install sonic motor',
       'Install sonic diesel-motor');
     // then the bill description is renamed
-    dsl.assertBillNotExists('Sonic screwdriver', 'Install sonic motor');
-    dsl.assertBillExists('Sonic screwdriver', 'Install sonic diesel-motor');
+    dsl.project.assertBillNotExists('Install sonic motor');
+    dsl.project.assertBillExists('Install sonic diesel-motor');
   });
 });

@@ -112,6 +112,12 @@ export class Driver {
   }
 
   isUserProjectMember(userName: string, projectName: string): boolean {
+    if (!this.projectExists(projectName)) {
+      throw new Error('Failed to find bill of project, project does not exist.');
+    }
+    if (!this.userExists(userName)) {
+      throw new Error('Failed to check if user is member of project, user does not exist.');
+    }
     const existing = this.projectContributors.filter(pc => {
       return pc.projectName === projectName && pc.contributorName === userName;
     });
@@ -155,7 +161,7 @@ export class Driver {
   }
 
   addBillOnBehalf(projectName: string, billDescription: string, contributorName: string): void {
-    if (!this.registeredUsers.has(contributorName)) {
+    if (!this.userExists(contributorName)) {
       throw new Error('Failed to add bill on behalf of user, user does not exists.');
     }
     this.bills.push({
@@ -166,6 +172,10 @@ export class Driver {
       owner: contributorName,
       endAmount: 0,
     });
+  }
+
+  private userExists(contributorName: string): boolean {
+    return this.registeredUsers.has(contributorName);
   }
 
   findBillOwner(projectName: string, billDescription: string): string {

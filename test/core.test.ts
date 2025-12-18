@@ -10,41 +10,41 @@ describe('Project bills and members', () => {
   });
   test('Project owner can add a bill', () => {
     // given a project owner
-    dsl.actingAsNewProjectOwner('Hoverboard', 'Marty');
+    dsl.project.actingAsNewProjectOwner('Owner');
     // when he adds a bill
-    dsl.addBill('Hoverboard', 'Mount antigravity pads');
+    dsl.project.addBill('Mount antigravity pads');
     // then the project contains the bill
-    dsl.assertProjectContainsBill('Hoverboard', 'Mount antigravity pads');
+    dsl.project.assertProjectContainsBill('Mount antigravity pads');
   });
   test('Project owner can invite a project contributor', () => {
     // given a project owner and another user
     dsl.createUser('George');
-    dsl.actingAsNewProjectOwner('Bionic limbs', 'Octavius');
+    dsl.project.actingAsNewProjectOwner('Octavius');
     // when the owner invites the user to the project
-    dsl.inviteProjectContributor('Bionic limbs', 'George');
+    dsl.project.inviteProjectContributor('George');
     // then he is the member of the project
-    dsl.assertUserIsProjectMember('George', 'Bionic limbs');
+    dsl.project.assertUserIsProjectMember('George');
   });
   test('Project contributor can add a bill', () => {
     // given a user is a contributor in a project
-    dsl.actingAsNewProjectContributor('Teleporter', 'Scotty');
+    dsl.project.actingAsNewProjectContributor('Scotty');
     // when he adds the bill
-    dsl.addBill('Teleporter', 'Install quantum-tunneling unit');
+    dsl.project.addBill('Install quantum-tunneling unit');
     // then the project contains the bill
-    dsl.assertProjectContainsBill('Teleporter', 'Install quantum-tunneling unit');
+    dsl.project.assertProjectContainsBill('Install quantum-tunneling unit');
   });
   test('Project owner can remove a project contributor from a project', () => {
     // given a project contributor is a member of a project
-    dsl.actingAsNewProjectOwnerWithContributor('Nanobots', 'Steve', 'Owner');
+    dsl.project.actingAsNewProjectOwnerWithContributor('Steve', 'Owner');
     // when he is removed from a project
-    dsl.removeProjectContributor('Nanobots', 'Steve');
+    dsl.project.removeProjectContributor('Steve');
     // then he is not a member of the project
-    dsl.assertUserIsNotProjectMember('Steve', 'Nanobots');
+    dsl.project.assertUserIsNotProjectMember('Steve');
   });
   test('Project owner is a project member', () => {
     // when user becomes a project owner
-    dsl.actingAsNewProjectOwner('Fusion battery', 'Tony');
+    dsl.project.actingAsNewProjectOwner('Tony');
     // then he is a project member
-    dsl.assertUserIsProjectMember('Tony', 'Fusion battery');
+    dsl.project.assertUserIsProjectMember('Tony');
   });
 });
