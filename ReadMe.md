@@ -112,3 +112,4 @@ Glossary:
 - "project contributor" - a person invited to the project, not the owner (person providing
   a service to the project owner)
 - "bill" - a project entry indicating a payable item, expected to be paid
+- "bill owner" - a user who created the bill
