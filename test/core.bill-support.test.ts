@@ -37,7 +37,7 @@ describe('Bill support', () => {
     dsl.addBillWithDate('Plasma-gun', 'Bill', '1999-12-12');
     // when the bill owner updates the date of the bill
     dsl.updateBillDate('Plasma-gun', 'Bill', '2025-01-01');
-    // then
+    // then the date is the updated date
     dsl.assertBillDate('Plasma-gun', 'Bill', '2025-01-01');
   });
   test('Bill owner can edit description', () => {
@@ -49,7 +49,7 @@ describe('Bill support', () => {
       'Sonic screwdriver',
       'Install sonic motor',
       'Install sonic diesel-motor');
-    // then
+    // then the bill description is renamed
     dsl.assertBillNotExists('Sonic screwdriver', 'Install sonic motor');
     dsl.assertBillExists('Sonic screwdriver', 'Install sonic diesel-motor');
   });
