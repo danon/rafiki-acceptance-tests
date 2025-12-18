@@ -105,7 +105,9 @@ Test filenames:
 
 Glossary:
 
-- "project" - link between two parties, one providing a service for the other
+- "project"
+    - link between at least two parties, one providing a service for the other
+    - can also be a space for a single person logging his work
 - "project member" - project owner or a project contributor
 - "project owner" - user who created the project (person requiring the service or
   providing a service for somebody outside the project)
