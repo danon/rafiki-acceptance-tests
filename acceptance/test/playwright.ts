@@ -1,6 +1,5 @@
 import {expect, Page, test as playwrightTest} from '@playwright/test';
-import {WebPlaywrightDriver} from './dsl/client/WebPlaywrightDriver';
-import {WebDriver} from './dsl/driver/WebDriver';
+import {commandQueryDriver} from './dsl/driver/commandQueryDriver';
 import {Dsl} from './dsl/Dsl';
 
 export const describe = playwrightTest.describe;
@@ -14,9 +13,9 @@ export function test(title: string, test: Test): void {
 type Test = (dsl: Dsl) => Promise<void>;
 
 async function createDsl(page: Page): Promise<Dsl> {
-  const driver = new WebPlaywrightDriver(page);
-  await driver.initialize();
-  return new Dsl(new WebDriver(driver));
+  await page.goto('http://localhost:4173/');
+  await page.getByText('Loaded').waitFor({state: 'visible'});
+  return new Dsl(commandQueryDriver(page));
 }
 
 export function assertEquals(expected: any, actual: any): void {
