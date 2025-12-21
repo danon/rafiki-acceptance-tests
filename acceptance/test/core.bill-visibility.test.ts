@@ -1,10 +1,8 @@
 import {Dsl} from './dsl/Dsl';
-import {beforeEach, describe, test} from './vitest';
+import {describe, test} from './playwright';
 
 describe('Bill visibility', () => {
-  let dsl: Dsl;
-  beforeEach(() => dsl = new Dsl());
-  test('Project contributor cannot access end amount of not own bill', async () => {
+  test('Project contributor cannot access end amount of not own bill', async (dsl: Dsl) => {
     // given two contributors in a project
     await dsl.project.actingAsNewProjectOwnerWithContributors(['Contrib1', 'Contrib2']);
     // when the first contributor adds a bill
@@ -14,7 +12,7 @@ describe('Bill visibility', () => {
     await dsl.actingAsUser('Contrib2');
     await dsl.project.assertBillEndAmount('Flux capacitor', -1);
   });
-  test('Project owner can access bill end amount of not own bill', async () => {
+  test('Project owner can access bill end amount of not own bill', async (dsl: Dsl) => {
     // given a project with a contributor
     await dsl.project.actingAsNewProjectContributor('Contrib', 'Owner');
     // when contributor adds a bill
@@ -23,7 +21,7 @@ describe('Bill visibility', () => {
     await dsl.actingAsUser('Owner');
     await dsl.project.assertBillEndAmount('Cryogenic pod', 15);
   });
-  test('Bill owner can access bill end amount of not own bill', async () => {
+  test('Bill owner can access bill end amount of not own bill', async (dsl: Dsl) => {
     // given a project contributor
     await dsl.project.actingAsNewProjectContributor('Contrib');
     // when contributor adds a bill

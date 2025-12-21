@@ -1,12 +1,11 @@
-import {assertEquals, assertFalse, assertTrue} from '../vitest';
-import {WebPlaywrightDriver} from './client/WebPlaywrightDriver';
-import {WebDriver} from './driver/WebDriver';
+import {assertEquals, assertFalse, assertTrue} from '../playwright';
 import {Driver} from './driver/Driver';
 import {DslProject} from './DslProject';
 
 export class Dsl {
-  private driver: Driver = new WebDriver(new WebPlaywrightDriver());
   public project: DslProject = new DslProject(this);
+
+  constructor(private driver: Driver) {}
 
   async actingAsNewProjectOwner(projectName: string, ownerName: string): Promise<void> {
     await this.driver.registerUserAndLogin(ownerName);

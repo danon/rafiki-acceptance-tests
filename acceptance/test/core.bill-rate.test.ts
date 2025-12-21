@@ -1,10 +1,8 @@
 import {Dsl} from './dsl/Dsl';
-import {beforeEach, describe, test} from './vitest';
+import {describe, test} from './playwright';
 
 describe('Bill rate', () => {
-  let dsl: Dsl;
-  beforeEach(() => dsl = new Dsl());
-  test('Add bill with custom/fixed amount', async () => {
+  test('Add bill with custom/fixed amount', async (dsl: Dsl) => {
     // given a project owner
     await dsl.project.actingAsNewProjectOwner('Owner');
     // when he adds a bill with fixed amount of 15
@@ -12,7 +10,7 @@ describe('Bill rate', () => {
     // then the end amount is 15
     await dsl.project.assertBillEndAmount('Force-field', 15);
   });
-  test('Add bill with an hourly rate', async () => {
+  test('Add bill with an hourly rate', async (dsl: Dsl) => {
     // given a project owner
     await dsl.project.actingAsNewProjectOwner('Owner');
     // when he adds an hourly bill of 2 hours for 10

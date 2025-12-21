@@ -2,7 +2,8 @@ version: 3
 tasks:
   install: yarn install
   start:
-    - task: install
+    - task: bundle
+    - yarn run vite preview
   bundle:
     - task: install
     - yarn run vite build

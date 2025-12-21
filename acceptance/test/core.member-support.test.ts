@@ -1,10 +1,8 @@
 import {Dsl} from './dsl/Dsl';
-import {beforeEach, describe, test} from './vitest';
+import {describe, test} from './playwright';
 
 describe('Member support', () => {
-  let dsl: Dsl;
-  beforeEach(() => dsl = new Dsl());
-  test('Project owner can add bill on behalf of contributor', async () => {
+  test('Project owner can add bill on behalf of contributor', async (dsl: Dsl) => {
     // given a project owner
     await dsl.project.actingAsNewProjectOwnerWithContributor('Contrib', 'Owner');
     // when he adds a bill on behalf of contributor
@@ -14,7 +12,7 @@ describe('Member support', () => {
     await dsl.project.assertBillOwner('Exoskeleton', 'Contrib');
   });
   describe('Filter bills by member', () => {
-    test('Include bills only by member', async () => {
+    test('Include bills only by member', async (dsl: Dsl) => {
       // given
       await dsl.project.actingAsNewProjectOwnerWithContributors(['Contrib1', 'Contrib2']);
       await dsl.project.actingAsUserAddBill('Contrib1', 'First neural chip');
@@ -25,7 +23,7 @@ describe('Member support', () => {
       await dsl.project.assertBillExists('First neural chip');
       await dsl.project.assertBillNotExists('Second neural chip');
     });
-    test('Exclude bills by member', async () => {
+    test('Exclude bills by member', async (dsl: Dsl) => {
       // given
       await dsl.project.actingAsNewProjectOwnerWithContributors(['Contrib1', 'Contrib2']);
       await dsl.project.actingAsUserAddBill('Contrib1', 'First ion engine');

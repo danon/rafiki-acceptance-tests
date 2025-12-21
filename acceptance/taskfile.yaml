@@ -1,6 +1,6 @@
 version: 3
 tasks:
-  install: yarn install
-  test:
-    - task: install
-    - yarn run vitest --run
+  install:
+    - yarn install
+    - yarn run playwright install --with-deps chromium
+  test: yarn playwright test

@@ -1,12 +1,17 @@
-import {functionCallerName} from '../driver/debug';
+import {Page} from '@playwright/test';
 
 export class WebPlaywrightDriver {
-  async fill(testId: string, value: string): Promise<void> {
-    throw new Error('Not implemented: ' + functionCallerName());
+  constructor(private page: Page) {}
 
+  async initialize(): Promise<void> {
+    await this.page.goto('http://localhost:4173/');
+  }
+
+  async fill(testId: string, value: string): Promise<void> {
+    await this.page.getByTestId(testId).fill(value);
   }
 
   async click(testId: string): Promise<void> {
-    throw new Error('Not implemented: ' + functionCallerName());
+    await this.page.getByTestId(testId).click();
   }
 }
