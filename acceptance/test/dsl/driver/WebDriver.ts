@@ -6,8 +6,12 @@ import {Driver} from './Driver';
 export class WebDriver implements Driver {
   constructor(private driver: WebPlaywrightDriver) {}
 
-  addBill(projectName: string, billDescription: string, date: string, endAmount: number): Promise<void> {
-    throw new Error('Not implemented: ' + functionCallerName());
+  async addBill(projectName: string, billDescription: string, date: string, endAmount: number): Promise<void> {
+    await this.driver.fill('addBill.projectName', projectName);
+    await this.driver.fill('addBill.billDescription', billDescription);
+    await this.driver.fill('addBill.date', date);
+    await this.driver.fill('addBill.endAmount', endAmount.toString());
+    await this.driver.click('addBill.action');
   }
 
   addBillOnBehalf(projectName: string, billDescription: string, contributorName: string): Promise<void> {
@@ -24,7 +28,8 @@ export class WebDriver implements Driver {
   }
 
   async createProject(projectName: string): Promise<void> {
-    throw new Error('Not implemented: ' + functionCallerName());
+    await this.driver.fill('createProject.projectName', projectName);
+    await this.driver.click('createProject.action');
   }
 
   async filterBillsByMember(userName: string, userIncluded: boolean): Promise<void> {
@@ -51,8 +56,10 @@ export class WebDriver implements Driver {
     return 0;
   }
 
-  inviteProjectContributor(projectName: string, projectContributor: string): Promise<void> {
-    throw new Error('Not implemented: ' + functionCallerName());
+  async inviteProjectContributor(projectName: string, projectContributor: string): Promise<void> {
+    await this.driver.fill('inviteProjectContributor.projectName', projectName);
+    await this.driver.fill('inviteProjectContributor.contributorName', projectContributor);
+    await this.driver.click('inviteProjectContributor.action');
   }
 
   async isUserProjectMember(userName: string, projectName: string): Promise<boolean> {
@@ -65,12 +72,13 @@ export class WebDriver implements Driver {
     return [];
   }
 
-  loginUser(userName: string): Promise<void> {
-    throw new Error('Not implemented: ' + functionCallerName());
+  async loginUser(userName: string): Promise<void> {
+    await this.driver.fill('authUsername', userName);
+    await this.driver.click('authLogin');
   }
 
-  logoutUser(): Promise<void> {
-    throw new Error('Not implemented: ' + functionCallerName());
+  async logoutUser(): Promise<void> {
+    await this.driver.click('authLogout');
   }
 
   async projectContainsBill(projectName: string, billDescription: string): Promise<boolean> {
