@@ -10,10 +10,15 @@ class CommandQueryHandler implements Handler<Driver> {
   constructor(private page: Page) {}
 
   async handle(methodName: TargetMethodName<Driver>, args: any[]): Promise<unknown> {
-    return await this.page.evaluate(
+    const result = await this.page.evaluate(
       ([methodName, args]) => {
         // @ts-ignore
         return window['driverCall'](methodName, args);
       }, [methodName, args]);
+    if (result.type === 'error') {
+      throw new Error('Failure returned from evaluation');
+    }
+    console.debug(result);
+    return result.result;
   }
 }
