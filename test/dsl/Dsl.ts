@@ -1,9 +1,10 @@
 import {assertEquals, assertFalse, assertTrue} from '../vitest';
-import {Driver} from './Driver';
+import {Driver} from './driver/Driver';
+import {InMemoryDriver} from './driver/InMemoryDriver';
 import {DslProject} from './DslProject';
 
 export class Dsl {
-  private driver: Driver = new Driver();
+  private driver: Driver = new InMemoryDriver();
   public project: DslProject = new DslProject(this);
 
   actingAsNewProjectOwner(projectName: string, ownerName: string): void {

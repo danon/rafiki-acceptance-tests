@@ -1,4 +1,5 @@
-import {DslTransaction} from './Dsl';
+import {Driver} from './Driver';
+import {DslTransaction} from '../Dsl';
 
 interface ProjectContributor {
   projectName: string;
@@ -21,7 +22,7 @@ function billMatches(projectName: string, billDescription: string): Predicate<Bi
     && bill.description === billDescription;
 }
 
-export class Driver {
+export class InMemoryDriver implements Driver {
   private registeredUsers = new Set<string>();
   private projectOwners = new Map<string, string>();
   private bills: Bill[] = [];
