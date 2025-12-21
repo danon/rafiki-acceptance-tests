@@ -1,5 +1,5 @@
-import {Driver} from './Driver';
 import {DslTransaction} from '../Dsl';
+import {Driver} from './Driver';
 
 interface ProjectContributor {
   projectName: string;
@@ -31,20 +31,20 @@ export class InMemoryDriver implements Driver {
 
   // auth
 
-  registerUserAndLogin(userName: string): void {
+  async registerUserAndLogin(userName: string): Promise<void> {
     if (this.registeredUsers.has(userName)) {
       throw new Error('Failed to register a user, user already exists.');
     }
     this.registeredUsers.add(userName);
-    this.loginUser(userName);
+    await this.loginUser(userName);
   }
 
-  logoutUser(): void {
+  async logoutUser(): Promise<void> {
     this.validateUserLoggedIn('Failed to logout user');
     this.currentUser = null;
   }
 
-  loginUser(userName: string) {
+  async loginUser(userName: string): Promise<void> {
     if (this.currentUser !== null) {
       throw new Error('Failed to login a user, other user is already logged in.');
     }
@@ -53,20 +53,20 @@ export class InMemoryDriver implements Driver {
 
   // core
 
-  createProject(projectName: string): void {
-    if (this.projectExists(projectName)) {
+  async createProject(projectName: string): Promise<void> {
+    if (await this.projectExists(projectName)) {
       throw new Error('Failed to create a project, project already exists.');
     }
     this.validateUserLoggedIn('Failed to create a project');
     this.projectOwners.set(projectName, this.currentUser!);
-    this.inviteProjectContributor(projectName, this.currentUser!);
+    await this.inviteProjectContributor(projectName, this.currentUser!);
   }
 
-  projectExists(projectName: string): boolean {
+  async projectExists(projectName: string): Promise<boolean> {
     return this.projectOwners.has(projectName);
   }
 
-  addBill(projectName: string, billDescription: string, date: string, endAmount: number): void {
+  async addBill(projectName: string, billDescription: string, date: string, endAmount: number): Promise<void> {
     this.validateUserLoggedIn('Failed to add a bill');
     this.bills.push({
       projectName,
@@ -78,8 +78,8 @@ export class InMemoryDriver implements Driver {
     });
   }
 
-  projectContainsBill(projectName: string, billDescription: string): boolean {
-    if (!this.projectExists(projectName)) {
+  async projectContainsBill(projectName: string, billDescription: string): Promise<boolean> {
+    if (!await this.projectExists(projectName)) {
       throw new Error('Failed to find bill of project, project does not exist.');
     }
     return !!this.findBillOptional(projectName, billDescription);
@@ -98,18 +98,18 @@ export class InMemoryDriver implements Driver {
     return bill;
   }
 
-  inviteProjectContributor(projectName: string, projectContributor: string) {
+  async inviteProjectContributor(projectName: string, projectContributor: string) {
     this.projectContributors.push({projectName, contributorName: projectContributor});
   }
 
-  removeProjectContributor(projectName: string, projectContributor: string): void {
+  async removeProjectContributor(projectName: string, projectContributor: string): Promise<void> {
     this.projectContributors = this.projectContributors.filter(pc => {
       return pc.projectName !== projectName || pc.contributorName !== projectContributor;
     });
   }
 
-  isUserProjectMember(userName: string, projectName: string): boolean {
-    if (!this.projectExists(projectName)) {
+  async isUserProjectMember(userName: string, projectName: string): Promise<boolean> {
+    if (!await this.projectExists(projectName)) {
       throw new Error('Failed to find bill of project, project does not exist.');
     }
     if (!this.userExists(userName)) {
@@ -123,7 +123,7 @@ export class InMemoryDriver implements Driver {
 
   // core.bill-support
 
-  sealBill(projectName: string, billDescription: string): void {
+  async sealBill(projectName: string, billDescription: string): Promise<void> {
     const bill = this.findBill(projectName, billDescription);
     if (bill.sealed) {
       throw new Error('Failed to seal bill, bill already sealed.');
@@ -131,33 +131,33 @@ export class InMemoryDriver implements Driver {
     bill.sealed = true;
   }
 
-  updateBillDate(projectName: string, billDescription: string, date: string): void {
+  async updateBillDate(projectName: string, billDescription: string, date: string): Promise<void> {
     this.findBill(projectName, billDescription).date = date;
   }
 
-  updateBillDescription(projectName: string, billDescription: string, updatedBillDescription: string): void {
+  async updateBillDescription(projectName: string, billDescription: string, updatedBillDescription: string): Promise<void> {
     this.findBill(projectName, billDescription).description = updatedBillDescription;
   }
 
-  removeBill(projectName: string, billDescription: string): void {
+  async removeBill(projectName: string, billDescription: string): Promise<void> {
     const billIndex = this.bills.findIndex(billMatches(projectName, billDescription));
     this.bills.splice(billIndex, 1);
   }
 
-  attemptRemoveBill(projectName: string, billDescription: string): void {
+  async attemptRemoveBill(projectName: string, billDescription: string): Promise<void> {
     // TODO does this step even make sense,
     // if the protocol does not allow something like that?
   }
 
-  findBillDate(projectName: string, billDescription: string): string {
+  async findBillDate(projectName: string, billDescription: string): Promise<string> {
     return this.findBill(projectName, billDescription).date;
   }
 
-  billSealed(projectName: string, billDescription: string): boolean {
+  async billSealed(projectName: string, billDescription: string): Promise<boolean> {
     return this.findBill(projectName, billDescription).sealed;
   }
 
-  addBillOnBehalf(projectName: string, billDescription: string, contributorName: string): void {
+  async addBillOnBehalf(projectName: string, billDescription: string, contributorName: string): Promise<void> {
     if (!this.userExists(contributorName)) {
       throw new Error('Failed to add bill on behalf of user, user does not exists.');
     }
@@ -175,11 +175,11 @@ export class InMemoryDriver implements Driver {
     return this.registeredUsers.has(contributorName);
   }
 
-  findBillOwner(projectName: string, billDescription: string): string {
+  async findBillOwner(projectName: string, billDescription: string): Promise<string> {
     return this.findBill(projectName, billDescription).owner;
   }
 
-  findBillEndAmount(projectName: string, billDescription: string): number {
+  async findBillEndAmount(projectName: string, billDescription: string): Promise<number> {
     if (this.currentUser === null) {
       throw new Error('Failed to find bill end amount, user not logged in.');
     }
@@ -199,7 +199,7 @@ export class InMemoryDriver implements Driver {
 
   private filteredBillPredicate = (bill: Bill) => true;
 
-  filterBillsByMember(userName: string, userIncluded: boolean): void {
+  async filterBillsByMember(userName: string, userIncluded: boolean): Promise<void> {
     this.filteredBillPredicate = (bill: Bill): boolean => {
       return userIncluded === (bill.owner === userName);
     };
@@ -211,16 +211,16 @@ export class InMemoryDriver implements Driver {
 
   private userWallets: Map<string, number> = new Map<string, number>();
 
-  findWalletBalance(): number {
+  async findWalletBalance(): Promise<number> {
     this.validateUserLoggedIn('Failed to find wallet balance');
     return this.userWallets.get(this.currentUser!) || 0;
   }
 
-  walletDeposit(amount: number): void {
+  async walletDeposit(amount: number): Promise<void> {
     this.validateUserLoggedIn('Failed to deposit into wallet');
     this.userWallets.set(
       this.currentUser!,
-      this.findWalletBalance() + amount);
+      await this.findWalletBalance() + amount);
     this.transactions.push({
       type: 'deposit',
       amount,
@@ -235,7 +235,7 @@ export class InMemoryDriver implements Driver {
 
   private transactions: DslTransaction[] = [];
 
-  listWalletTransactions(): DslTransaction[] {
+  async listWalletTransactions(): Promise<DslTransaction[]> {
     return this.transactions;
   }
 }

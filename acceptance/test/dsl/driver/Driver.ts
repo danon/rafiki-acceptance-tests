@@ -2,55 +2,55 @@ import {DslTransaction} from '../Dsl';
 
 export interface Driver {
   // auth
-  registerUserAndLogin(userName: string): void;
+  registerUserAndLogin(userName: string): Promise<void>;
 
-  logoutUser(): void;
+  logoutUser(): Promise<void>;
 
-  loginUser(userName: string): void;
+  loginUser(userName: string): Promise<void>;
 
   // core
 
-  createProject(projectName: string): void;
+  createProject(projectName: string): Promise<void>;
 
-  projectExists(projectName: string): boolean;
+  projectExists(projectName: string): Promise<boolean>;
 
-  addBill(projectName: string, billDescription: string, date: string, endAmount: number): void;
+  addBill(projectName: string, billDescription: string, date: string, endAmount: number): Promise<void>;
 
-  projectContainsBill(projectName: string, billDescription: string): boolean;
+  projectContainsBill(projectName: string, billDescription: string): Promise<boolean>;
 
-  inviteProjectContributor(projectName: string, projectContributor: string): void;
+  inviteProjectContributor(projectName: string, projectContributor: string): Promise<void>;
 
-  removeProjectContributor(projectName: string, projectContributor: string): void;
+  removeProjectContributor(projectName: string, projectContributor: string): Promise<void>;
 
-  isUserProjectMember(userName: string, projectName: string): boolean;
+  isUserProjectMember(userName: string, projectName: string): Promise<boolean>;
 
   // core.bill-support
 
-  sealBill(projectName: string, billDescription: string): void;
+  sealBill(projectName: string, billDescription: string): Promise<void>;
 
-  updateBillDate(projectName: string, billDescription: string, date: string): void;
+  updateBillDate(projectName: string, billDescription: string, date: string): Promise<void>;
 
-  updateBillDescription(projectName: string, billDescription: string, updatedBillDescription: string): void;
+  updateBillDescription(projectName: string, billDescription: string, updatedBillDescription: string): Promise<void>;
 
-  removeBill(projectName: string, billDescription: string): void;
+  removeBill(projectName: string, billDescription: string): Promise<void>;
 
-  attemptRemoveBill(projectName: string, billDescription: string): void;
+  attemptRemoveBill(projectName: string, billDescription: string): Promise<void>;
 
-  findBillDate(projectName: string, billDescription: string): string;
+  findBillDate(projectName: string, billDescription: string): Promise<string>;
 
-  billSealed(projectName: string, billDescription: string): boolean;
+  billSealed(projectName: string, billDescription: string): Promise<boolean>;
 
-  addBillOnBehalf(projectName: string, billDescription: string, contributorName: string): void;
+  addBillOnBehalf(projectName: string, billDescription: string, contributorName: string): Promise<void>;
 
-  findBillOwner(projectName: string, billDescription: string): string;
+  findBillOwner(projectName: string, billDescription: string): Promise<string>;
 
-  findBillEndAmount(projectName: string, billDescription: string): number;
+  findBillEndAmount(projectName: string, billDescription: string): Promise<number>;
 
-  filterBillsByMember(userName: string, userIncluded: boolean): void;
+  filterBillsByMember(userName: string, userIncluded: boolean): Promise<void>;
 
-  findWalletBalance(): number;
+  findWalletBalance(): Promise<number>;
 
-  walletDeposit(amount: number): void;
+  walletDeposit(amount: number): Promise<void>;
 
-  listWalletTransactions(): DslTransaction[];
+  listWalletTransactions(): Promise<DslTransaction[]>;
 }
