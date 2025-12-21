@@ -63,13 +63,21 @@ export class WebDriver implements Driver {
   }
 
   async isUserProjectMember(userName: string, projectName: string): Promise<boolean> {
-    throw new Error('Not implemented: ' + functionCallerName());
-    return false;
+    return this.auxiliaryCommand(functionCallerName(), [...arguments]);
   }
 
   async listWalletTransactions(): Promise<DslTransaction[]> {
     throw new Error('Not implemented: ' + functionCallerName());
     return [];
+  }
+
+  async auxiliaryCommand(command: string, commandArguments: any[]): Promise<any> {
+    await this.driver.click('eval.clear');
+    await this.driver.fill('eval.command', command);
+    await this.driver.fill('eval.argumentsJson', JSON.stringify(commandArguments));
+    await this.driver.click('eval.command');
+    const resultJson = await this.driver.inputText('eval.resultJson');
+    return JSON.parse(resultJson);
   }
 
   async loginUser(userName: string): Promise<void> {

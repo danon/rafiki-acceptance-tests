@@ -14,4 +14,8 @@ export class WebPlaywrightDriver {
   async click(testId: string): Promise<void> {
     await this.page.getByTestId(testId).click();
   }
+
+  inputText(testId: string):Promise<string> {
+    return this.page.getByTestId(testId).inputValue()
+  }
 }
