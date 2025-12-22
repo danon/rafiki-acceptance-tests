@@ -1,5 +1,6 @@
 import {expect, Page, test as playwrightTest} from '@playwright/test';
 import {commandQueryDriver} from './dsl/driver/commandQueryDriver';
+import {playwrightStepDecorate} from './dsl/driver/playwrightStepDecorate';
 import {Dsl} from './dsl/Dsl';
 
 export const describe = playwrightTest.describe;
@@ -10,12 +11,14 @@ export function test(title: string, test: Test): void {
   });
 }
 
+export {playwrightTest};
+
 type Test = (dsl: Dsl) => Promise<void>;
 
 async function createDsl(page: Page): Promise<Dsl> {
   await page.goto('http://localhost:4173/');
   await page.getByText('Loaded').waitFor({state: 'visible'});
-  return new Dsl(commandQueryDriver(page));
+  return new Dsl(playwrightStepDecorate(commandQueryDriver(page)));
 }
 
 export function assertEquals(expected: any, actual: any): void {

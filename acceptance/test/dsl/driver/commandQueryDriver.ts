@@ -18,7 +18,6 @@ class CommandQueryHandler implements Handler<Driver> {
     if (result.type === 'error') {
       throw new Error('Failure returned from evaluation');
     }
-    console.debug(result);
     return result.result;
   }
 }
