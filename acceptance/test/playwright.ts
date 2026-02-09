@@ -1,5 +1,6 @@
 import {expect, Page, test as playwrightTest} from '@playwright/test';
 import {commandQueryDriver} from './dsl/driver/commandQueryDriver';
+import {InMemoryDriver} from './dsl/driver/InMemoryDriver';
 import {playwrightStepDecorate} from './dsl/driver/playwrightStepDecorate';
 import {Dsl} from './dsl/Dsl';
 
@@ -16,9 +17,12 @@ export {playwrightTest};
 type Test = (dsl: Dsl) => Promise<void>;
 
 async function createDsl(page: Page): Promise<Dsl> {
-  await page.goto('http://localhost:4173/');
-  await page.getByText('Loaded').waitFor({state: 'visible'});
-  return new Dsl(playwrightStepDecorate(commandQueryDriver(page)));
+  if (true) {
+    await page.goto('http://localhost:4173/');
+    await page.getByText('Loaded').waitFor({state: 'visible'});
+    return new Dsl(playwrightStepDecorate(commandQueryDriver(page)));
+  }
+  return new Dsl(playwrightStepDecorate(new InMemoryDriver()));
 }
 
 export function assertEquals(expected: any, actual: any): void {
