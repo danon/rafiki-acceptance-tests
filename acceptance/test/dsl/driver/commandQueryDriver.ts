@@ -10,6 +10,7 @@ class CommandQueryHandler implements Handler<Driver> {
   constructor(private page: Page) {}
 
   async handle(methodName: TargetMethodName<Driver>, args: any[]): Promise<unknown> {
+    await this.page.goto('http://localhost:4173/');
     const result = await this.page.evaluate(
       ([methodName, args]) => {
         // @ts-ignore

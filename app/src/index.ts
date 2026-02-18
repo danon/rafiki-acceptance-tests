@@ -1,29 +1,20 @@
-import {InMemoryDriver} from './InMemoryDriver';
-
 declare global {
   interface Window {
     driverCall(methodName: string, args: any[]): any;
   }
 }
-const inMemoryDriver = new InMemoryDriver();
-window.driverCall = function (methodName: string, methodArguments: any[]): any {
-  const result = {};
-  // @ts-ignore
-  result.methodName = methodName;
-  // @ts-ignore
-  result.methodArguments = methodArguments;
+
+window.driverCall = async function (methodName: string, methodArguments: any[]): Promise<any> {
+  const response = await fetch("http://localhost:5000/", {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({methodName, methodArguments}),
+  });
   try {
-    // @ts-ignore
-    result.result = inMemoryDriver[methodName](...methodArguments);
-    // @ts-ignore
-    result.type = 'success';
+    return {type: 'success', result: await response.json()};
   } catch (error: unknown) {
-    // @ts-ignore
-    result.type = 'error';
-    // @ts-ignore
-    result.error = error.toString();
+    return {type: 'error', error: error};
   }
-  return result;
 };
 
 export {};

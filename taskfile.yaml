@@ -7,3 +7,6 @@ includes:
   app:
     taskfile: ./app/
     dir: ./app/
+  server:
+    taskfile: ./server/
+    dir: ./server/
