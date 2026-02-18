@@ -3,6 +3,8 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "strict": true
+    "strict": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
   }
 }

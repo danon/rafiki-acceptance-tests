@@ -1,10 +1,9 @@
-declare global {
-  interface Window {
-    driverCall(methodName: string, args: any[]): any;
-  }
-}
+import {render} from "solid-js/web";
+import {createApplication} from "./Application";
+
 const sessionId = crypto.randomUUID();
-window.driverCall = async function (methodName: string, methodArguments: any[]): Promise<any> {
+
+async function handler(methodName: string, methodArguments: any[]): Promise<unknown> {
   const response = await fetch("http://localhost:5000/", {
     method: 'POST',
     headers: {
@@ -18,6 +17,9 @@ window.driverCall = async function (methodName: string, methodArguments: any[]):
   } catch (error: unknown) {
     return {type: 'error', error: error};
   }
-};
+}
 
-export {};
+const root = document.getElementById("root")!;
+render(createApplication(handler), root);
+
+export type Handler = (methodName: string, methodArguments: any[]) => Promise<unknown>;

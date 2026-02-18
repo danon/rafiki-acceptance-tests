@@ -2,6 +2,8 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "vite": "^7.3.0"
+    "solid-js": "^1.9.11",
+    "vite": "^7.3.0",
+    "vite-plugin-solid": "^2.11.10"
   }
 }
