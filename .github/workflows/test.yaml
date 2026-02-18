@@ -1,0 +1,56 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: driver
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d driver"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup task
+        uses: go-task/setup-task@v1
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Restore + build server
+        run: |
+          dotnet restore ./server/server.csproj
+          dotnet build ./server/server.csproj -c Release --no-restore
+
+      - name: Start server
+        run: task server:start &
+
+      - name: Start client
+        run: task app:start &
+
+      - name: Install acceptance tests
+        run: task accept:install
+      - name: Run acceptance tests
+        run: task accept:test
